@@ -25,7 +25,12 @@
                 <div><b>summary</b>: {{ meta.summary }}</div>
                 <div><b>description</b>: {{ meta.description }}</div>
                 <div><b>tags</b>: {{ meta.tags }}</div>
-                <div style="font-weight: bold">parameters:</div>
+                <div>
+                  <span style="font-weight: bold">parameters:</span>
+                </div>
+                <div>
+                  <a-button type="primary" @click="copyParamList(item)">复制参数列表</a-button>
+                </div>
                 <table>
                   <tr>
                     <th>name</th>
@@ -46,10 +51,23 @@
                           {{ parseType(param.schema) }}
                         </span>
                       </template>
-                      <span v-else>void</span>
+                      <span v-else>{{ param.type || "void" }}</span>
                     </td>
                   </tr>
                 </table>
+                <div :id="item + '__param'" style="height: 0; overflow: hidden">
+                  <div v-for="(param, paramIndex) in meta.parameters" :key="paramIndex">
+                    <div>/*{{ param.description }}*/</div>
+                    <div>
+                      {{ param.name }}:
+                      <template v-if="param.schema">
+                        {{ parseType(param.schema) }}
+                      </template>
+                      <span v-else>{{ param.type || "void" }}</span>
+                      <span>;</span>
+                    </div>
+                  </div>
+                </div>
                 <div style="font-weight: bold">responses:</div>
                 <table>
                   <tr>
@@ -166,6 +184,14 @@ export default class App extends Vue {
     // const res = await axios.get("//" + window.location.host + "/v2/api-docs");
     const res = await axios.get("//localhost:8000/v2/api-docs");
     this.swaggerData = res.data;
+  }
+
+  copyParamList(path: string) {
+    const ele = document.getElementById(path + "__param");
+    if (ele) {
+      copy(ele.innerText);
+      this.$message.info("复制成功");
+    }
   }
 
   copyInterface(id: string) {
