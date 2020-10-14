@@ -7,5 +7,5 @@ Vue.use(Antd);
 
 new Vue({
   el: "#app",
-  render: (h) => h(App),
+  render: (h) => h(App as any),
 });

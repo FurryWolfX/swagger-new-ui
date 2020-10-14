@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 20px" v-if="swaggerData">
-    <div>为难以检索的Swagger重新写了个界面（v1.1）</div>
+    <div>为难以检索的Swagger重新写了个界面（v1.2）</div>
     <a-row style="padding-bottom: 20px">
       <a-col :span="12">
         <a-input v-model="url" placeholder="请输入接口URL" />
@@ -82,11 +82,16 @@
       <a-col :span="12" style="padding-left: 20px">
         <div class="scroll">
           <div class="card-wrap" v-for="defKey in definitionsKeys" :key="defKey">
-            <a-card :id="defKey">
-              <div class="card-title">{{ defKey }}</div>
-              <div v-for="(prop, propKey) in swaggerData.definitions[defKey].properties">
-                <div v-if="prop.description">/*{{ prop.description }}*/</div>
-                <div>{{ propKey }}: {{ parseType(prop) }};</div>
+            <a-card>
+              <div class="card-title">
+                <span>{{ defKey }}</span>
+                <a-button type="primary" @click="copyInterface(defKey)">一键复制TS Interface</a-button>
+              </div>
+              <div :id="defKey">
+                <div v-for="(prop, propKey) in swaggerData.definitions[defKey].properties">
+                  <div v-if="prop.description">/*{{ prop.description }}*/</div>
+                  <div>{{ propKey }}: {{ parseType(prop) }};</div>
+                </div>
               </div>
             </a-card>
           </div>
@@ -99,6 +104,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
+import copy from "copy-to-clipboard";
 // import data from "./assets/api.json";
 
 interface ISwaggerData {
@@ -162,6 +168,14 @@ export default class App extends Vue {
     this.swaggerData = res.data;
   }
 
+  copyInterface(id: string) {
+    const ele = document.getElementById(id);
+    if (ele) {
+      copy(`export interface I${id} {\n${ele.innerText}\n}`);
+      this.$message.info("复制成功");
+    }
+  }
+
   parsePath(path: { [k: string]: any }) {
     const result: IMeta[] = [];
     const keys = Object.keys(path);
@@ -218,7 +232,7 @@ export default class App extends Vue {
 table {
   width: 100%;
   th {
-    background-color: #49cc90;
+    background-color: #1890ff;
     color: #fff;
   }
   th,
