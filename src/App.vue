@@ -197,7 +197,7 @@ export default class App extends Vue {
   copyInterface(id: string) {
     const ele = document.getElementById(id);
     if (ele) {
-      copy(`export interface I${id} {\n${ele.innerText}\n}`);
+      copy(`export interface ${id} {\n${ele.innerText}\n}`);
       this.$message.info("复制成功");
     }
   }
