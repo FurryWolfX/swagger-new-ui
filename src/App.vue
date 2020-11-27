@@ -1,7 +1,17 @@
 <template>
-  <div style="padding: 20px" v-if="swaggerData">
-    <div>为难以检索的Swagger重新写了个界面（v1.2）</div>
-    <a-row style="padding-bottom: 20px">
+  <div style="padding: 0 20px">
+    <div>为难以检索的Swagger重新写了个新界面（v2.0）By wolfx.cn</div>
+    <a-row>
+      <a-col :span="12">
+        <span style="vertical-align: middle">
+          <a-input style="width: 400px" v-model="remoteUrl" placeholder="请输入服务端地址" />
+        </span>
+        <span style="vertical-align: middle">
+          <a-button @click="getData">解析</a-button>
+        </span>
+      </a-col>
+    </a-row>
+    <a-row style="padding-bottom: 20px; margin-top: 4px">
       <a-col :span="12">
         <a-input v-model="url" placeholder="请输入接口URL" />
       </a-col>
@@ -10,7 +20,7 @@
       </a-col>
     </a-row>
 
-    <a-row>
+    <a-row v-if="swaggerData">
       <a-col :span="12">
         <div class="scroll">
           <div v-for="(item, pIndex) in pathList" :key="pIndex">
@@ -123,7 +133,6 @@
 import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
 import copy from "copy-to-clipboard";
-// import data from "./assets/api.json";
 
 interface ISwaggerData {
   basePath: string;
@@ -149,6 +158,7 @@ interface IMeta {
 @Component
 export default class App extends Vue {
   swaggerData: ISwaggerData | null = null;
+  remoteUrl = "http://192.168.1.5:9999/admin-api";
   url = "";
   className = "";
 
@@ -180,10 +190,15 @@ export default class App extends Vue {
     }
   }
 
-  async mounted() {
-    // const res = await axios.get("//" + window.location.host + "/v2/api-docs");
-    const res = await axios.get("//localhost:8000/v2/api-docs");
-    this.swaggerData = res.data;
+  async mounted() {}
+
+  async getData() {
+    const res = await axios.get(`/getData?url=${encodeURIComponent(this.remoteUrl)}`);
+    if (res.data?.code === 200) {
+      this.swaggerData = res.data.data;
+    } else {
+      alert("解析异常");
+    }
   }
 
   copyParamList(path: string) {
