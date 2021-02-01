@@ -164,9 +164,15 @@ export default class App extends Vue {
 
   get pathList() {
     if (this.swaggerData) {
-      if (this.url) {
+      const url = this.url.trim();
+      if (url) {
         return Object.keys(this.swaggerData.paths)
-          .filter((k) => k.indexOf(this.url) !== -1)
+          .filter((k) => {
+            const meta = this.parsePath(this.swaggerData.paths[k]);
+            const includeUrl = k.indexOf(url) !== -1;
+            const includeSummary = meta[0]?.summary.indexOf(url) !== -1;
+            return includeUrl || includeSummary;
+          })
           .slice(0, 100);
       } else {
         return Object.keys(this.swaggerData.paths).slice(0, 100);
