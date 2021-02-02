@@ -1,20 +1,20 @@
 {
-  "include": [],
   "compilerOptions": {
-    "experimentalDecorators": true,
-    "resolveJsonModule": true,
+    "target": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "types": ["vite/client"],
+    "allowJs": false,
+    "skipLibCheck": false,
+    "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
-    "target": "es5",
-    "module": "esnext",
-    "moduleResolution": "node",
     "strict": true,
-    "removeComments": true,
-    "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": ".",
-    "paths": {
-      "~*": ["./src/*"]
-    },
-    "types": ["vue", "ant-design-vue"]
-  }
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react"
+  },
+  "include": ["./src"]
 }
