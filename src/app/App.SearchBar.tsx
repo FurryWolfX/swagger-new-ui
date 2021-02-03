@@ -59,9 +59,7 @@ function SearchBar() {
             </Button>
           </span>
           <span style={{ verticalAlign: "middle", paddingLeft: 20 }}>
-            <Button loading={loading} onClick={() => saveRemoteUrl(remoteUrl)}>
-              保存常用地址
-            </Button>
+            <Button onClick={() => saveRemoteUrl(remoteUrl)}>保存常用地址</Button>
           </span>
         </Col>
       </Row>
